@@ -1,6 +1,7 @@
 import os
 import shutil
 import re
+from pathlib import Path
 
 from block_markdown import markdown_to_html_node
 
@@ -55,11 +56,11 @@ def generate_page(from_path, template_path, dest_path, basepath):
         file.write(html_final)
 
 def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
-    for name in os.listdir(dir_path_content):
-        src_path = os.path.join(dir_path_content, name)
-        dst_path = os.path.join(dest_dir_path, name)
-        if os.path.isfile(src_path) and src_path.endswith(".md"):
-            generate_page(src_path, template_path, dst_path.replace(".md",".html"), basepath)
-        if os.path.isdir(src_path):
-            os.makedirs(dst_path,exist_ok=True)
-            generate_pages_recursive(src_path, template_path, dst_path, basepath)
+    for filename in os.listdir(dir_path_content):
+        from_path = os.path.join(dir_path_content, filename)
+        dest_path = os.path.join(dest_dir_path, filename)
+        if os.path.isfile(from_path):
+            dest_path = Path(dest_path).with_suffix(".html")
+            generate_page(from_path, template_path, dest_path, basepath)
+        else:
+            generate_pages_recursive(from_path, template_path, dest_path, basepath)
