@@ -46,8 +46,8 @@ def generate_page(from_path, template_path, dest_path, basepath):
         template_content
         .replace("{{ Title }}", extract_title(md_content))
         .replace("{{ Content }}", markdown_to_html_node(md_content).to_html())
-        .replace("href=\"/", "href=\"{basepath}")
-        .replace("src=\"/", "src=\"{basepath}")
+        .replace("href=\"/", f"href=\"{basepath}")
+        .replace("src=\"/", f"src=\"{basepath}")
     )
     dir_path = os.path.dirname(dest_path)
     if dir_path:
